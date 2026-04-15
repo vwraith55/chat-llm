@@ -1,0 +1,9 @@
+[submodule "test_projects/llm-lab"]
+	path = test_projects/llm-lab
+	url = https://github.com/vwraith55/llm-lab
+[submodule "test_projects/markdown"]
+	path = test_projects/markdown
+	url = https://github.com/vwraith55/markdown
+[submodule "test_projects/ebay-webscraper"]
+	path = test_projects/ebay-webscraper
+	url = https://github.com/vwraith55/ebay-webscraper

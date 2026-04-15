@@ -1,0 +1,7 @@
+chat.py
+pyproject.toml
+cmc_csci040_yourname.egg-info/PKG-INFO
+cmc_csci040_yourname.egg-info/SOURCES.txt
+cmc_csci040_yourname.egg-info/dependency_links.txt
+cmc_csci040_yourname.egg-info/entry_points.txt
+cmc_csci040_yourname.egg-info/top_level.txt
