@@ -1,7 +1,5 @@
 name: doctests
-
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,11 +9,10 @@ jobs:
         with:
           python-version: '3.13'
       - name: Install dependencies
-        run: pip install pytest coverage groq python-dotenv
+        run: pip install pytest pytest-cov coverage groq python-dotenv
       - name: Run doctests with coverage
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          coverage run -m pytest chat.py --doctest-modules
+          coverage run -m pytest --doctest-modules chat.py tools/
           coverage report -m
-
