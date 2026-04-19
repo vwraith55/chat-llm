@@ -28,16 +28,16 @@ class Chat:
     tools manually using slash commands (e.g. /ls, /cat, /grep).
 
     >>> chat = Chat()
-    >>> result = chat.send_message('my name is bob. do not use any tools to answer this.', 
+    >>> result = chat.send_message('my name is bob. do not use any tools to answer this.',
     temperature=0.0)
     >>> 'bob' in result.lower()
     True
-    >>> result2 = chat.send_message('what is my name? do not use any tools to answer this.', 
+    >>> result2 = chat.send_message('what is my name? do not use any tools to answer this.',
     temperature=0.0)
     >>> 'bob' in result2.lower()
     True
     >>> chat2 = Chat()
-    >>> result3 = chat2.send_message('what is my name? do not use any tools to answer this.', 
+    >>> result3 = chat2.send_message('what is my name? do not use any tools to answer this.',
     temperature=0.0)
     >>> 'bob' in result3.lower()
     False
