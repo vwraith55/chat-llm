@@ -7,3 +7,6 @@
 [submodule "test_projects/ebay-webscraper"]
 	path = test_projects/ebay-webscraper
 	url = https://github.com/vwraith55/ebay-webscraper
+[submodule "test_projects/vwraith55.github.io"]
+	path = test_projects/vwraith55.github.io
+	url = https://github.com/vwraith55/vwraith55.github.io.git

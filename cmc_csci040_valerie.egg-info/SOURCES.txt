@@ -1,9 +1,14 @@
 README.md
 chat.py
 pyproject.toml
+setup.cfg
 cmc_csci040_valerie.egg-info/PKG-INFO
 cmc_csci040_valerie.egg-info/SOURCES.txt
 cmc_csci040_valerie.egg-info/dependency_links.txt
 cmc_csci040_valerie.egg-info/entry_points.txt
 cmc_csci040_valerie.egg-info/requires.txt
 cmc_csci040_valerie.egg-info/top_level.txt
+test_projects/markdown/markdown_compiler/__init__.py
+test_projects/markdown/markdown_compiler/__main__.py
+test_projects/markdown/markdown_compiler/util/__init__.py
+test_projects/markdown/markdown_compiler/util/line_functions.py
