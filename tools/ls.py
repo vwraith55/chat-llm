@@ -23,7 +23,7 @@ ls_tool_def = {
 }
 
 
-def ls(path="."):
+def ls(path=None):
     """
     List files in the given directory, sorted asciibetically.
 
