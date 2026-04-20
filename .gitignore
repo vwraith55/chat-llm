@@ -2,3 +2,7 @@ lab.env
 .env
 .env
 lab.env
+__pycache__/
+*.egg-info/
+dist/
+.coverage
