@@ -34,6 +34,21 @@ def load_image(path, messages):
     'Error: unsafe path'
     >>> load_image('nonexistent.jpg', [])
     'Error: file not found'
+    >>> import os
+    >>> with open('_test_image.jpg', 'wb') as f:
+    ...     _ = f.write(bytes.fromhex('ffd8ffe0'))
+    >>> messages = []
+    >>> load_image('_test_image.jpg', messages)
+    'Image _test_image.jpg loaded successfully.'
+    >>> len(messages) == 1
+    True
+    >>> os.unlink('_test_image.jpg')
+    >>> with open('_test_image.png', 'wb') as f:
+    ...     _ = f.write(bytes.fromhex('89504e47'))
+    >>> messages2 = []
+    >>> load_image('_test_image.png', messages2)
+    'Image _test_image.png loaded successfully.'
+    >>> os.unlink('_test_image.png')
     """
     if not is_path_safe(path):
         return 'Error: unsafe path'
@@ -58,3 +73,4 @@ def load_image(path, messages):
         ]
     })
     return f'Image {path} loaded successfully.'
+

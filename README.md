@@ -10,9 +10,10 @@ ValChat is an AI chat agent that can read and analyze files in your current dire
 [![codecov](https://codecov.io/gh/vwraith55/chat-llm/branch/main/graph/badge.svg)](https://codecov.io/gh/vwraith55/chat-llm)
 [![PyPI](https://img.shields.io/pypi/v/cmc-csci040-valerie)](https://pypi.org/project/cmc-csci040-valerie/)
 
+# Demo 
 ![gif of usage example](screenrecordingcs40.gif)
 
-# Markdown 
+# Example: Markdown 
 ```bash
 % cd markdown
 % chat
@@ -25,7 +26,7 @@ This project currently supports Markdown (.md) file format for conversion to HTM
 This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
 
 
-# Ebay-Webscraper
+# Example: Ebay-Webscraper
 ```bash
 % cd ebay-webscraper
 % chat
@@ -47,7 +48,7 @@ The script uses the following packages:
 This example shows ValChat automatically using the ls and cat tools to explore the project structure and analyze source code dependencies without the user needing to specify which files to read.
 
 
-# Website 
+# Example: Webpage
 ```bash
 % cd vwraith55.github.io
 % chat
