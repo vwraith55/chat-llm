@@ -8,10 +8,14 @@ from tools.ls import ls, ls_tool_def
 from tools.cat import cat, cat_tool_def
 from tools.grep import grep, grep_tool_def
 from tools.compact import compact
+import readline
+import glob
+from tools.load_image import load_image, load_image_tool_def
 
 load_dotenv()
 
-TOOLS = [calculate_tool_def, ls_tool_def, cat_tool_def, grep_tool_def]
+
+TOOLS = [calculate_tool_def, ls_tool_def, cat_tool_def, grep_tool_def, load_image_tool_def]
 
 AVAILABLE_FUNCTIONS = {
     "calculate": calculate,
@@ -46,6 +50,7 @@ class Chat:
     def __init__(self, debug=False):
         self.debug = debug
         self.MODEL = "llama-3.1-8b-instant"
+        self.VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
         self.messages = [
             {
                 "role": "system",
@@ -70,7 +75,10 @@ class Chat:
 
         chat_completion = self.client.chat.completions.create(
             messages=self.messages,
-            model=self.MODEL,
+            model=self.VISION_MODEL if any(
+                isinstance(m.get('content'), list)
+                for m in self.messages
+            ) else self.MODEL,
             temperature=temperature,
             seed=0,
             tools=TOOLS,
@@ -141,6 +149,30 @@ class Chat:
         )
         return output
 
+def completer(text, state):
+    """
+    Tab completion for slash commands and file paths.
+
+    Returns the state-th completion option for the given text.
+    """
+    commands = list(AVAILABLE_FUNCTIONS.keys()) + ['compact']
+    buffer = readline.get_line_buffer()
+
+    if buffer.startswith('/'):
+        parts = buffer[1:].split()
+        if len(parts) == 0 or (len(parts) == 1 and not buffer.endswith(' ')):
+            # Complete the command name
+            matches = [f'/{c} ' for c in commands if c.startswith(text.lstrip('/'))]
+        else:
+            # Complete file paths
+            matches = glob.glob(text + '*')
+    else:
+        matches = []
+
+    try:
+        return matches[state]
+    except IndexError:
+        return None
 
 def repl(debug=False):
     """
@@ -167,6 +199,9 @@ def repl(debug=False):
     <BLANKLINE>
     """
     chat = Chat(debug=debug)
+    readline.set_completer(completer)
+    readline.parse_and_bind('tab: complete')
+
     try:
         while True:
             user_input = input("chat> ")
@@ -181,6 +216,12 @@ def repl(debug=False):
                         {"role": "system", "content": f"Previous conversation summary: {summary}"}
                     ]
                     print(f"Compacted. Summary: {summary}")
+                elif command == "load_image":
+                    if args:
+                        output = load_image(args[0], chat.messages)
+                        print(output)
+                    else:
+                        print('Usage: /load_image <path>')
                 else:
                     output = chat.run_tool_manually(command, args)
                     print(output)
@@ -190,7 +231,6 @@ def repl(debug=False):
 
     except (KeyboardInterrupt, EOFError):
         print()
-
 
 def main():
     """
