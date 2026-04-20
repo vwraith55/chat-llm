@@ -1,2 +1,2 @@
 [console_scripts]
-chat = chat:repl
+chat = chat:main

@@ -7,6 +7,7 @@ from tools.calculate import calculate, calculate_tool_def
 from tools.ls import ls, ls_tool_def
 from tools.cat import cat, cat_tool_def
 from tools.grep import grep, grep_tool_def
+from tools.compact import compact
 
 load_dotenv()
 
@@ -42,7 +43,8 @@ class Chat:
 
     client = Groq()
 
-    def __init__(self):
+    def __init__(self, debug=False):
+        self.debug = debug
         self.MODEL = "llama-3.1-8b-instant"
         self.messages = [
             {
@@ -140,7 +142,7 @@ class Chat:
         return output
 
 
-def repl():
+def repl(debug=False):
     """
     Run an interactive read-eval-print loop for the chat agent.
 
@@ -164,7 +166,7 @@ def repl():
     ...
     <BLANKLINE>
     """
-    chat = Chat()
+    chat = Chat(debug=debug)
     try:
         while True:
             user_input = input("chat> ")
@@ -173,8 +175,15 @@ def repl():
                 parts = user_input[1:].split()
                 command = parts[0] if parts else ""
                 args = parts[1:]
-                output = chat.run_tool_manually(command, args)
-                print(output)
+                if command == "compact":
+                    summary = compact(chat.messages)
+                    chat.messages = [
+                        {"role": "system", "content": f"Previous conversation summary: {summary}"}
+                    ]
+                    print(f"Compacted. Summary: {summary}")
+                else:
+                    output = chat.run_tool_manually(command, args)
+                    print(output)
             else:
                 response = chat.send_message(user_input, temperature=0)
                 print(response)
@@ -183,5 +192,22 @@ def repl():
         print()
 
 
+def main():
+    """
+    Entry point that handles REPL mode, single message mode, and --debug flag.
+    """
+    import sys
+    args = sys.argv[1:]
+    debug = '--debug' in args
+    args = [a for a in args if a != '--debug']
+
+    if args:
+        message = ' '.join(args)
+        chat = Chat(debug=debug)
+        print(chat.send_message(message, temperature=0))
+    else:
+        repl(debug=debug)
+
+
 if __name__ == "__main__":
-    repl()
+    main()
