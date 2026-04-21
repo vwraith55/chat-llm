@@ -149,6 +149,7 @@ class Chat:
         )
         return output
 
+
 def completer(text, state):
     """
     Tab completion for slash commands and file paths.
@@ -173,6 +174,7 @@ def completer(text, state):
         return matches[state]
     except IndexError:
         return None
+
 
 def repl(debug=False):
     """
@@ -231,6 +233,7 @@ def repl(debug=False):
 
     except (KeyboardInterrupt, EOFError):
         print()
+
 
 def main():
     """
