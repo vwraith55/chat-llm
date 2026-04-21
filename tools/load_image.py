@@ -1,4 +1,3 @@
-cat > tools/load_image.py << 'EOF'
 """Tool for loading a local image file into the chat context."""
 
 import base64
@@ -39,39 +38,4 @@ def load_image(path, messages):
     >>> with open('_test_image.jpg', 'wb') as f:
     ...     _ = f.write(bytes.fromhex('ffd8ffe0'))
     >>> messages = []
-    >>> load_image('_test_image.jpg', messages)
-    'Image _test_image.jpg loaded successfully.'
-    >>> len(messages) == 1
-    True
-    >>> os.unlink('_test_image.jpg')
-    >>> with open('_test_image.png', 'wb') as f:
-    ...     _ = f.write(bytes.fromhex('89504e47'))
-    >>> messages2 = []
-    >>> load_image('_test_image.png', messages2)
-    'Image _test_image.png loaded successfully.'
-    >>> os.unlink('_test_image.png')
-    """
-    if not is_path_safe(path):
-        return 'Error: unsafe path'
-    try:
-        with open(path, 'rb') as f:
-            image_data = base64.b64encode(f.read()).decode('utf-8')
-    except FileNotFoundError:
-        return 'Error: file not found'
-
-    ext = path.split('.')[-1].lower()
-    media_type = f'image/{ext}' if ext != 'jpg' else 'image/jpeg'
-
-    messages.append({
-        "role": "user",
-        "content": [
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:{media_type};base64,{image_data}"
-                }
-            }
-        ]
-    })
-    return f'Image {path} loaded successfully.'
-EOF
+    >>
