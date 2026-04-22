@@ -28,6 +28,9 @@ def cat(path):
 
     Returns an error string if the path is unsafe or the file cannot be read.
 
+    # do not create files in your doctests
+    # you should use files that already exist in the repo
+    # it is okay to create files just for these tests
     >>> import os
     >>> with open('_test_cat_tmp.txt', 'w') as f:
     ...     _ = f.write('hello world')

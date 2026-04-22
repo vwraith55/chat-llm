@@ -75,6 +75,7 @@ class Chat:
 
         chat_completion = self.client.chat.completions.create(
             messages=self.messages,
+            # this is hideous
             model=self.VISION_MODEL if any(
                 isinstance(m.get('content'), list)
                 for m in self.messages
@@ -126,11 +127,12 @@ class Chat:
         Run a tool manually and append its output to message history as a tool result.
 
         >>> chat = Chat()
-        >>> output = chat.run_tool_manually('ls', ['.'])
-        >>> isinstance(output, str)
-        True
-        >>> chat.run_tool_manually('nonexistent', [])
-        'Unknown command: nonexistent'
+        >>> chat.run_tool_manually('ls', ['.'])
+
+        # these are bad test cases;
+        # they don't actually test anything about your code
+        # there's no reason not to just list the actual contents of the folder here;
+        # ls is fully deterministic
         """
         function_to_call = AVAILABLE_FUNCTIONS.get(command)
 
@@ -155,6 +157,8 @@ def completer(text, state):
     Tab completion for slash commands and file paths.
 
     Returns the state-th completion option for the given text.
+
+    # need to add doctests here for credit
     """
     commands = list(AVAILABLE_FUNCTIONS.keys()) + ['compact']
     buffer = readline.get_line_buffer()
@@ -193,12 +197,13 @@ def repl(debug=False):
     >>> builtins.input = monkey_input
     >>> repl()  # doctest: +ELLIPSIS
     chat> Hello!
-    ...
     chat> /ls .
-    ...
     chat> Goodbye.
-    ...
     <BLANKLINE>
+
+    # your test cases were not good; you need to actually provide the output here;
+    # the purpose of doctests is for humans to read,
+    # and only secondarily for machines to run
     """
     chat = Chat(debug=debug)
     readline.set_completer(completer)
@@ -212,6 +217,10 @@ def repl(debug=False):
                 parts = user_input[1:].split()
                 command = parts[0] if parts else ""
                 args = parts[1:]
+                # it's quite ugly to have a special case for these tools here...
+                # you could restructure the code so that this code is inside the tool code;
+                # also, there is no way for the LLM to actually call these tools right now,
+                # so you don't (yet) get the extra credit for them
                 if command == "compact":
                     summary = compact(chat.messages)
                     chat.messages = [

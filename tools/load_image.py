@@ -35,6 +35,9 @@ def load_image(path, messages):
     >>> load_image('nonexistent.jpg', [])
     'Error: file not found'
     >>> import os
+
+    # don't create images within test cases;
+    # actually add images to the repo and load real images
     >>> with open('_test_image.jpg', 'wb') as f:
     ...     _ = f.write(bytes.fromhex('ffd8ffe0'))
     >>> messages = []

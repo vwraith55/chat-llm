@@ -1,5 +1,3 @@
-
-
 # ValChat
 
 ValChat is an AI chat agent that can read and analyze files in your current directory using Groq's LLM API.
@@ -10,10 +8,14 @@ ValChat is an AI chat agent that can read and analyze files in your current dire
 [![codecov](https://codecov.io/gh/vwraith55/chat-llm/branch/main/graph/badge.svg)](https://codecov.io/gh/vwraith55/chat-llm)
 [![PyPI](https://img.shields.io/pypi/v/cmc-csci040-valerie)](https://pypi.org/project/cmc-csci040-valerie/)
 
-# Demo 
 ![gif of usage example](demo.gif)
 
-# Example: Markdown 
+<!-- do not reuse top-level headers -->
+## Example: Markdown 
+<!-- codeblocks/images should always have text before them explaining why the reader should care -->
+This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
+
+
 ```bash
 % cd markdown
 % chat
@@ -22,9 +24,6 @@ It appears that this project is a simple markdown to HTML compiler. It can conve
 chat> what file formats does this project support?
 This project currently supports Markdown (.md) file format for conversion to HTML.
 ```
-
-This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
-
 
 # Example: Ebay-Webscraper
 ```bash
