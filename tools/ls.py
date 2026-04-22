@@ -31,7 +31,11 @@ def ls(path=None):
 
     >>> import os
     >>> ls('.')  # doctest: +ELLIPSIS
-    '...'
+
+    # ... is not an acceptable test case;
+    # ls is fully deterministic,
+    # and so you should just actually list the files
+    
     >>> 'chat.py' in ls('.')
     True
     >>> ls('/etc')
