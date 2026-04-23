@@ -3,6 +3,7 @@
 import base64
 from tools.safe_path import is_path_safe
 
+
 load_image_tool_def = {
     "type": "function",
     "function": {

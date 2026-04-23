@@ -1,5 +1,6 @@
 import subprocess
 
+
 def doctests(path):
     """
     Run doctests on a python file and return the output.
@@ -18,6 +19,7 @@ def doctests(path):
         text=True
     )
     return result.stdout + result.stderr
+
 
 doctests_tool_def = {
     "type": "function",

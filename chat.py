@@ -1,5 +1,6 @@
 
 import json
+import os
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -18,8 +19,17 @@ from tools.rm import rm, rm_tool_def
 load_dotenv()
 
 
-TOOLS = [calculate_tool_def, ls_tool_def, cat_tool_def, grep_tool_def, load_image_tool_def, doctests_tool_def, write_file_tool_def, write_files_tool_def, rm_tool_def]
-
+TOOLS = [
+    calculate_tool_def,
+    ls_tool_def,
+    cat_tool_def,
+    grep_tool_def,
+    load_image_tool_def,
+    doctests_tool_def,
+    write_file_tool_def,
+    write_files_tool_def,
+    rm_tool_def,
+]
 AVAILABLE_FUNCTIONS = {
     "calculate": calculate,
     "ls": ls,
@@ -190,7 +200,6 @@ def completer(text, state):
     except IndexError:
         return None
 
-import os
 
 def repl(debug=False):
     """

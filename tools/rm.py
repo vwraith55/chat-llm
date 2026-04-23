@@ -3,6 +3,7 @@ import glob
 import git
 from tools.safe_path import is_path_safe
 
+
 def rm(path):
     """
     Delete file(s) matching the given path or glob pattern and commit the changes.
@@ -30,6 +31,7 @@ def rm(path):
     repo.index.commit(f'[docchat] rm {path}')
 
     return f'Successfully deleted {len(matches)} file(s): {", ".join(matches)}'
+
 
 rm_tool_def = {
     "type": "function",

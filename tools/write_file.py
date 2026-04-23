@@ -2,6 +2,7 @@ import git
 from tools.safe_path import is_path_safe
 from tools.doctests import doctests
 
+
 def write_files(files, commit_message):
     """
     Write multiple files and commit them to git.
@@ -44,6 +45,7 @@ def write_file(path, contents, commit_message):
     """
     return write_files([{'path': path, 'contents': contents}], commit_message)
 
+
 write_file_tool_def = {
     "type": "function",
     "function": {
@@ -69,6 +71,7 @@ write_file_tool_def = {
         },
     },
 }
+
 
 write_files_tool_def = {
     "type": "function",
@@ -97,4 +100,4 @@ write_files_tool_def = {
             "required": ["files", "commit_message"],
         },
     },
-}  
+} 
