@@ -10,7 +10,7 @@ ValChat is an AI chat agent that can read and analyze files in your current dire
 [![codecov](https://codecov.io/gh/vwraith55/chat-llm/branch/main/graph/badge.svg)](https://codecov.io/gh/vwraith55/chat-llm)
 [![PyPI](https://img.shields.io/pypi/v/cmc-csci040-valerie)](https://pypi.org/project/cmc-csci040-valerie/)
 
-# Demo 
+## Demo 
 ![gif of usage example](demo.gif)
 
 ## Example: Markdown
