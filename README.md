@@ -13,7 +13,7 @@ ValChat is an AI chat agent that can read and analyze files in your current dire
 # Demo 
 ![gif of usage example](demo.gif)
 
-# Example: Markdown
+## Example: Markdown
 This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
 
 ```bash
@@ -26,7 +26,7 @@ This project currently supports Markdown (.md) file format for conversion to HTM
 ```
 
 
-# Example: Ebay-Webscraper
+## Example: Ebay-Webscraper
 This example shows ValChat automatically using the ls and cat tools to explore the project structure and analyze source code dependencies without the user needing to specify which files to read.
 
 ```bash
@@ -48,7 +48,7 @@ The script uses the following packages:
 ```
 
 
-# Example: Webpage
+## Example: Webpage
 This example demonstrates ValChat navigating a personal website project by listing its files and reading HTML content to summarize the page's purpose and structure.
 
 ```bash
