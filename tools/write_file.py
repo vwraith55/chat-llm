@@ -100,4 +100,4 @@ write_files_tool_def = {
             "required": ["files", "commit_message"],
         },
     },
-} 
+}

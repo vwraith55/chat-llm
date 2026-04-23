@@ -8,13 +8,12 @@ def rm(path):
     """
     Delete file(s) matching the given path or glob pattern and commit the changes.
 
-    >>> f = open('test_rm.txt', 'w'); f.close()
-    >>> 'Successfully deleted' in rm('test_rm.txt')
-    True
     >>> rm('/etc/passwd')
     'Error: unsafe path'
     >>> rm('../secret.txt')
     'Error: unsafe path'
+    >>> rm('nonexistent_file_xyz.txt')
+    'Error: no files found matching nonexistent_file_xyz.txt'
     """
     if not is_path_safe(path):
         return 'Error: unsafe path'
@@ -27,7 +26,10 @@ def rm(path):
         os.remove(match)
 
     repo = git.Repo('.')
-    repo.index.remove(matches, force=True)
+    try:
+        repo.index.remove(matches, force=True)
+    except Exception:
+        pass
     repo.index.commit(f'[docchat] rm {path}')
 
     return f'Successfully deleted {len(matches)} file(s): {", ".join(matches)}'

@@ -221,6 +221,7 @@ def repl(debug=False):
     __pycache__
     chat.py
     demo.gif
+    hello.py
     pyproject.toml
     requirements.txt
     setup.cfg
