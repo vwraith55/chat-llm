@@ -82,6 +82,7 @@ class Chat:
             }
         ]
 
+
     def send_message(self, message, temperature=0.8):
         """
         Send a message to the LLM and return its response, handling any tool calls.
@@ -92,11 +93,10 @@ class Chat:
         True
         """
         self.messages.append({"role": "user", "content": message})
-
         has_images = any(
-            isinstance(m.get('content'), list)
-            for m in self.messages
-        )
+        isinstance(m.get('content'), list)
+        for m in self.messages
+    )
         chat_completion = self.client.chat.completions.create(
             messages=self.messages,
             model=self.VISION_MODEL if has_images else self.MODEL,
@@ -104,41 +104,53 @@ class Chat:
             seed=0,
             tools=TOOLS,
             tool_choice="auto",
-        )
-
+    )
         response_message = chat_completion.choices[0].message
         tool_calls = response_message.tool_calls
-
         if tool_calls:
-            # Add assistant's tool-use message to history
-            self.messages.append(response_message)
-
+        # Add assistant's tool-use message to history
+            self.messages.append({
+                "role": "assistant",
+                "content": response_message.content,
+                "tool_calls": response_message.tool_calls,
+                })
+            doctest_failed = False
             for tool_call in tool_calls:
                 function_name = tool_call.function.name
                 function_to_call = AVAILABLE_FUNCTIONS.get(function_name)
                 function_args = json.loads(tool_call.function.arguments)
                 function_response = function_to_call(**function_args)
-
                 self.messages.append(
                     {
                         "tool_call_id": tool_call.id,
                         "role": "tool",
                         "name": function_name,
                         "content": str(function_response),
-                    }
-                )
+                }
+            )
+            # Check if doctests failed after writing a python file
+                if function_name in ('write_file', 'write_files'):
+                    if 'failed' in str(function_response).lower():
+                        doctest_failed = True
 
-            # Get final response after tool use
+        # Ralph Wiggum loop: force another round if doctests failed
+            if doctest_failed:
+                self.messages.append({
+                    "role": "user",
+                    "content": "Your doctests failed. Please fix the code and try again."
+            })
+                return self.send_message('', temperature=temperature)
+
+        # Get final response after tool use
             second_response = self.client.chat.completions.create(
                 messages=self.messages,
                 model=self.MODEL,
                 temperature=temperature,
                 seed=0,
-            )
+        )
             result = second_response.choices[0].message.content
         else:
             result = response_message.content
-
         self.messages.append({"role": "assistant", "content": result})
         return result
 
