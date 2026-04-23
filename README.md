@@ -70,3 +70,23 @@ The current directory contains the following files and directories:
 chat> what does favfoods.html tell you?
 The favfoods.html file appears to be a webpage that lists the author's favorite foods, along with a brief description and a link to a restaurant rating app called Beli. The page also includes a disclaimer stating that it is not an advertisement.
 ```
+## Agent in Action
+
+The session below demonstrates that `docchat` can create files when asked
+and these files are automatically added to the git repo.
+
+```
+$ ls -a
+.git  .github  .gitignore  .gitmodules  README.md  chat.py  demo.gif  pyproject.toml  requirements.txt  setup.cfg  tools
+$ git log --oneline
+ac7b9c6 (HEAD -> project4) again
+$ python3 chat.py
+chat> Create a python file called hello.py that prints 'hello world'
+This will create a file called `hello.py` in the current directory with the contents `print('hello world')`. When you run this file using Python (e.g., `python hello.py`), it will print "hello world".
+chat> ^C
+$ ls -a
+.git  .github  .gitignore  .gitmodules  README.md  chat.py  demo.gif  hello.py  pyproject.toml  requirements.txt  setup.cfg  tools
+$ git log --oneline
+0d41fc6 (HEAD -> project4) [docchat] Initial commit
+ac7b9c6 again
+```

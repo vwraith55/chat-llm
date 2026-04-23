@@ -11,17 +11,24 @@ from tools.compact import compact
 import readline
 import glob
 from tools.load_image import load_image_tool_def
+from tools.doctests import doctests, doctests_tool_def
+from tools.write_file import write_file, write_files, write_file_tool_def, write_files_tool_def
+from tools.rm import rm, rm_tool_def
 
 load_dotenv()
 
 
-TOOLS = [calculate_tool_def, ls_tool_def, cat_tool_def, grep_tool_def, load_image_tool_def]
+TOOLS = [calculate_tool_def, ls_tool_def, cat_tool_def, grep_tool_def, load_image_tool_def, doctests_tool_def, write_file_tool_def, write_files_tool_def, rm_tool_def]
 
 AVAILABLE_FUNCTIONS = {
     "calculate": calculate,
     "ls": ls,
     "cat": cat,
     "grep": grep,
+    "doctests": doctests,
+    "write_file": write_file,
+    "write_files": write_files,
+    "rm": rm,
 }
 
 
@@ -183,9 +190,13 @@ def completer(text, state):
     except IndexError:
         return None
 
+import os
 
 def repl(debug=False):
     """
+    Run an interactive read-eval-print loop for the chat agent.
+    Supports slash commands (e.g. /ls, /cat file.txt) for manual tool invocation.
+
     >>> def monkey_input(prompt, user_inputs=['/ls .']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
@@ -208,6 +219,10 @@ def repl(debug=False):
     tools
     <BLANKLINE>
     """
+    # Check for .git folder
+    if not os.path.exists('.git'):
+        print('Error: no .git folder found in current directory')
+        return
     chat = Chat(debug=debug)
     readline.set_completer(completer)
     readline.parse_and_bind('tab: complete')
