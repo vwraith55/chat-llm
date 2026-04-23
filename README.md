@@ -13,7 +13,9 @@ ValChat is an AI chat agent that can read and analyze files in your current dire
 # Demo 
 ![gif of usage example](demo.gif)
 
-# Example: Markdown 
+# Example: Markdown
+This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
+
 ```bash
 % cd markdown
 % chat
@@ -23,10 +25,10 @@ chat> what file formats does this project support?
 This project currently supports Markdown (.md) file format for conversion to HTML.
 ```
 
-This example demonstrates ValChat's ability to read a project's README and source files to provide a clear summary of its functionality and supported formats without any manual file navigation.
-
 
 # Example: Ebay-Webscraper
+This example shows ValChat automatically using the ls and cat tools to explore the project structure and analyze source code dependencies without the user needing to specify which files to read.
+
 ```bash
 % cd ebay-webscraper
 % chat
@@ -45,10 +47,10 @@ The script uses the following packages:
 - playwright
 ```
 
-This example shows ValChat automatically using the ls and cat tools to explore the project structure and analyze source code dependencies without the user needing to specify which files to read.
-
 
 # Example: Webpage
+This example demonstrates ValChat navigating a personal website project by listing its files and reading HTML content to summarize the page's purpose and structure.
+
 ```bash
 % cd vwraith55.github.io
 % chat
@@ -68,5 +70,3 @@ The current directory contains the following files and directories:
 chat> what does favfoods.html tell you?
 The favfoods.html file appears to be a webpage that lists the author's favorite foods, along with a brief description and a link to a restaurant rating app called Beli. The page also includes a disclaimer stating that it is not an advertisement.
 ```
-
-This example demonstrates ValChat navigating a personal website project by listing its files and reading HTML content to summarize the page's purpose and structure.
