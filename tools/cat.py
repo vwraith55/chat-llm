@@ -25,26 +25,18 @@ cat_tool_def = {
 def cat(path):
     """
     Read and return the contents of a file as a string.
-
     Returns an error string if the path is unsafe or the file cannot be read.
 
-    >>> import os
-    >>> with open('_test_cat_tmp.txt', 'w') as f:
-    ...     _ = f.write('hello world')
-    >>> cat('_test_cat_tmp.txt')
+    >>> cat('tools/test_cat.txt')
     'hello world'
-    >>> os.unlink('_test_cat_tmp.txt')
     >>> cat('/etc/passwd')
     'Error: unsafe path'
     >>> cat('../outside.txt')
     'Error: unsafe path'
     >>> cat('nonexistent_file_xyz.txt')
     'Error: file not found'
-    >>> with open('_test_bad.bin', 'wb') as f:
-    ...     _ = f.write(bytes.fromhex('80818283'))
-    >>> cat('_test_bad.bin')
+    >>> cat('demo.gif')
     'Error: could not decode file'
-    >>> os.unlink('_test_bad.bin')
     """
     if not is_path_safe(path):
         return 'Error: unsafe path'

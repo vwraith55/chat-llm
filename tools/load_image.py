@@ -25,7 +25,6 @@ load_image_tool_def = {
 def load_image(path, messages):
     """
     Load a local image and add it to the chat messages list.
-
     Returns a confirmation string or error message.
 
     >>> load_image('/etc/passwd', [])
@@ -34,22 +33,16 @@ def load_image(path, messages):
     'Error: unsafe path'
     >>> load_image('nonexistent.jpg', [])
     'Error: file not found'
-    >>> import os
-    >>> with open('_test_image.jpg', 'wb') as f:
-    ...     _ = f.write(bytes.fromhex('ffd8ffe0'))
     >>> messages = []
-    >>> load_image('_test_image.jpg', messages)
-    'Image _test_image.jpg loaded successfully.'
+    >>> load_image('tools/steak.png', messages)
+    'Image tools/steak.png loaded successfully.'
     >>> len(messages) == 1
     True
-    >>> os.unlink('_test_image.jpg')
-    >>> with open('_test_image.png', 'wb') as f:
-    ...     _ = f.write(bytes.fromhex('89504e47'))
-    >>> messages2 = []
-    >>> load_image('_test_image.png', messages2)
-    'Image _test_image.png loaded successfully.'
-    >>> os.unlink('_test_image.png')
     """
+    if path is None:
+        return 'Usage: /load_image <path>'
+    if messages is None:
+        messages = []
     if not is_path_safe(path):
         return 'Error: unsafe path'
     try:

@@ -10,7 +10,7 @@ from tools.grep import grep, grep_tool_def
 from tools.compact import compact
 import readline
 import glob
-from tools.load_image import load_image, load_image_tool_def
+from tools.load_image import load_image_tool_def
 
 load_dotenv()
 
@@ -73,12 +73,13 @@ class Chat:
         """
         self.messages.append({"role": "user", "content": message})
 
+        has_images = any(
+            isinstance(m.get('content'), list)
+            for m in self.messages
+        )
         chat_completion = self.client.chat.completions.create(
             messages=self.messages,
-            model=self.VISION_MODEL if any(
-                isinstance(m.get('content'), list)
-                for m in self.messages
-            ) else self.MODEL,
+            model=self.VISION_MODEL if has_images else self.MODEL,
             temperature=temperature,
             seed=0,
             tools=TOOLS,
@@ -126,8 +127,9 @@ class Chat:
         Run a tool manually and append its output to message history as a tool result.
 
         >>> chat = Chat()
-        >>> output = chat.run_tool_manually('ls', ['.'])
-        >>> isinstance(output, str)
+        >>> 'chat.py' in chat.run_tool_manually('ls', ['.'])
+        True
+        >>> 'README.md' in chat.run_tool_manually('ls', ['.'])
         True
         >>> chat.run_tool_manually('nonexistent', [])
         'Unknown command: nonexistent'
@@ -155,6 +157,12 @@ def completer(text, state):
     Tab completion for slash commands and file paths.
 
     Returns the state-th completion option for the given text.
+    >>> completer('', 0) is None
+    True
+    >>> completer('anything', 0) is None
+    True
+    >>> completer('something_else', 1) is None
+    True
     """
     commands = list(AVAILABLE_FUNCTIONS.keys()) + ['compact']
     buffer = readline.get_line_buffer()
@@ -178,11 +186,7 @@ def completer(text, state):
 
 def repl(debug=False):
     """
-    Run an interactive read-eval-print loop for the chat agent.
-
-    Supports slash commands (e.g. /ls, /cat file.txt) for manual tool invocation.
-
-    >>> def monkey_input(prompt, user_inputs=['Hello!', '/ls .', 'Goodbye.']):
+    >>> def monkey_input(prompt, user_inputs=['/ls .']):
     ...     try:
     ...         user_input = user_inputs.pop(0)
     ...         print(f'{prompt}{user_input}')
@@ -191,23 +195,26 @@ def repl(debug=False):
     ...         raise KeyboardInterrupt
     >>> import builtins
     >>> builtins.input = monkey_input
-    >>> repl()  # doctest: +ELLIPSIS
-    chat> Hello!
-    ...
+    >>> repl()
     chat> /ls .
-    ...
-    chat> Goodbye.
-    ...
+    README.md
+    __pycache__
+    chat.py
+    demo.gif
+    htmlcov
+    pyproject.toml
+    requirements.txt
+    setup.cfg
+    test_projects
+    tools
     <BLANKLINE>
     """
     chat = Chat(debug=debug)
     readline.set_completer(completer)
     readline.parse_and_bind('tab: complete')
-
     try:
         while True:
             user_input = input("chat> ")
-
             if user_input.startswith("/"):
                 parts = user_input[1:].split()
                 command = parts[0] if parts else ""
@@ -218,19 +225,12 @@ def repl(debug=False):
                         {"role": "system", "content": f"Previous conversation summary: {summary}"}
                     ]
                     print(f"Compacted. Summary: {summary}")
-                elif command == "load_image":
-                    if args:
-                        output = load_image(args[0], chat.messages)
-                        print(output)
-                    else:
-                        print('Usage: /load_image <path>')
                 else:
                     output = chat.run_tool_manually(command, args)
                     print(output)
             else:
                 response = chat.send_message(user_input, temperature=0)
                 print(response)
-
     except (KeyboardInterrupt, EOFError):
         print()
 

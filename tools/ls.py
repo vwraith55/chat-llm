@@ -26,20 +26,17 @@ ls_tool_def = {
 def ls(path=None):
     """
     List files in the given directory, sorted asciibetically.
-
     Returns an error string if the path is unsafe (absolute or traversal).
 
-    >>> import os
-    >>> ls('.')  # doctest: +ELLIPSIS
-    '...'
-    >>> 'chat.py' in ls('.')
+    >>> 'cat.py' in ls('tools')
+    True
+    >>> 'steak.png' in ls('tools')
     True
     >>> ls('/etc')
     'Error: unsafe path'
     >>> ls('../secret')
     'Error: unsafe path'
-    >>> result = ls('nonexistent_folder_xyz')
-    >>> result
+    >>> ls('nonexistent_folder_xyz')
     ''
     """
     if not is_path_safe(path):
