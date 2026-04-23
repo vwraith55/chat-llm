@@ -1,6 +1,6 @@
 def add(a, b):
     """
     >>> add(2, 2)
-    99
+    4
     """
     return a + b
