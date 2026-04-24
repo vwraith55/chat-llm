@@ -1,5 +1,6 @@
 
 import json
+import re
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -23,6 +24,36 @@ AVAILABLE_FUNCTIONS = {
     "cat": cat,
     "grep": grep,
 }
+
+
+def _parse_text_tool_call(content):
+    """
+    Parse a plain-text tool call like:
+    cat {"name":"cat","parameters":{"path":"README.md"}}
+
+    Returns (name, args) or None if the text is not a recognized tool call.
+    """
+    if not isinstance(content, str):
+        return None
+
+    match = re.match(r"^\s*([a-z_]+)\s+(\{.*\})\s*$", content, re.DOTALL)
+    if not match:
+        return None
+
+    name = match.group(1)
+    if name not in AVAILABLE_FUNCTIONS:
+        return None
+
+    try:
+        payload = json.loads(match.group(2))
+    except json.JSONDecodeError:
+        return None
+
+    if isinstance(payload, dict) and payload.get("name") == name and isinstance(payload.get("parameters"), dict):
+        return name, payload["parameters"]
+    if isinstance(payload, dict):
+        return name, payload
+    return None
 
 
 class Chat:
@@ -117,7 +148,31 @@ class Chat:
             )
             result = second_response.choices[0].message.content
         else:
-            result = response_message.content
+            parsed_tool = _parse_text_tool_call(response_message.content)
+            if parsed_tool:
+                function_name, function_args = parsed_tool
+                function_to_call = AVAILABLE_FUNCTIONS[function_name]
+                function_response = function_to_call(**function_args)
+
+                self.messages.append({"role": "assistant", "content": response_message.content})
+                self.messages.append(
+                    {
+                        "role": "user",
+                        "content": (
+                            f"Tool output from {function_name}:\n{function_response}\n\n"
+                            "Now answer the original question in 1-2 sentences using that tool output."
+                        ),
+                    }
+                )
+                second_response = self.client.chat.completions.create(
+                    messages=self.messages,
+                    model=self.MODEL,
+                    temperature=temperature,
+                    seed=0,
+                )
+                result = second_response.choices[0].message.content
+            else:
+                result = response_message.content
 
         self.messages.append({"role": "assistant", "content": result})
         return result
