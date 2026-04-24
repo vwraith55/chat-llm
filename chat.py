@@ -11,14 +11,11 @@ from tools.grep import grep, grep_tool_def
 from tools.compact import compact
 import readline
 import glob
-from tools.load_image import load_image
+from tools.load_image import load_image, load_image_tool_def
 from tools.doctests import doctests, doctests_tool_def
 from tools.write_file import write_file, write_files, write_file_tool_def, write_files_tool_def
 from tools.rm import rm, rm_tool_def
 from tools.pip_install import pip_install, pip_install_tool_def
-
-load_dotenv()
-
 
 TOOLS = [
     calculate_tool_def,
@@ -45,6 +42,8 @@ AVAILABLE_FUNCTIONS = {
     "rm": rm,
     "pip_install": pip_install,
 }
+
+load_dotenv()
 
 
 class Chat:
@@ -85,7 +84,7 @@ class Chat:
         ]
 
 
-def send_message(self, message, temperature=0.8):
+    def send_message(self, message, temperature=0.8):
         """
         Send a message to the LLM and return its response, handling any tool calls.
 
