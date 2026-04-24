@@ -152,7 +152,7 @@ class Chat:
         self.messages.append({"role": "assistant", "content": result})
         return result
 
-def run_tool_manually(self, command, args):
+    def run_tool_manually(self, command, args):
         """
         Run a tool manually and append its output to message history as a tool result.
 
@@ -176,6 +176,7 @@ def run_tool_manually(self, command, args):
             }
         )
         return output
+
 
 def completer(text, state):
     """
@@ -229,7 +230,6 @@ def repl(debug=False):
     __pycache__
     chat.py
     demo.gif
-    hello.py
     pyproject.toml
     requirements.txt
     setup.cfg
