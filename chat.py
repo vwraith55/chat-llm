@@ -32,11 +32,13 @@ TOOLS = [
     rm_tool_def,
     pip_install_tool_def,
 ]
+
 AVAILABLE_FUNCTIONS = {
     "calculate": calculate,
     "ls": ls,
     "cat": cat,
     "grep": grep,
+    "load_image": load_image,
     "doctests": doctests,
     "write_file": write_file,
     "write_files": write_files,
@@ -69,7 +71,7 @@ class Chat:
 
     def __init__(self, debug=False):
         self.debug = debug
-        self.MODEL = "llama-3.1-8b-instant"
+        self.MODEL = "llama-3.3-70b-versatile"
         self.VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
         self.messages = [
             {

@@ -76,17 +76,65 @@ The session below demonstrates that `ValChat` can create files when asked
 and these files are automatically added to the git repo.
 
 ```
-% ls -a
-.git  .github  .gitignore  .gitmodules  README.md  chat.py  demo.gif  pyproject.toml  requirements.txt  setup.cfg  tools
-% git log --oneline
-ac7b9c6 (HEAD -> project4) again
-% python3 chat.py
-chat> Create a python file called hello.py that prints 'hello world'
-This will create a file called `hello.py` in the current directory with the contents `print('hello world')`. When you run this file using Python (e.g., `python hello.py`), it will print "hello world".
+$ git log --oneline
+e36e204 (HEAD -> project4) add Ralph Wiggum loop
+$ python3 chat.py
+chat> Create a file called greet.py that prints 'hello from the agent'
+The file `greet.py` has been created with the specified content.
 chat> ^C
-% ls -a
-.git  .github  .gitignore  .gitmodules  README.md  chat.py  demo.gif  hello.py  pyproject.toml  requirements.txt  setup.cfg  tools
-% git log --oneline
-0d41fc6 (HEAD -> project4) [docchat] Initial commit
-ac7b9c6 again
+$ cat greet.py
+print('hello from the agent')
+$ git log --oneline -3
+dc09793 (HEAD -> project4) [docchat] Added greet.py file that prints a hello message
+e36e204 add Ralph Wiggum loop
 ```
+
+The session below demonstrates that `ValChat` can delete files and automatically commit the changes.
+
+```
+$ python3 chat.py
+chat> Delete the file greet.py
+The file greet.py has been deleted from the current directory.
+chat> ^C
+$ ls
+README.md  chat.py  demo.gif  hello.py  pyproject.toml  requirements.txt  setup.cfg  test_projects  tools
+$ git log --oneline -3
+6a31ae5 (HEAD -> project4) [docchat] rm greet.py
+dc09793 [docchat] Added greet.py file that prints a hello message
+e36e204 add Ralph Wiggum loop
+```
+
+## Extra Credits
+
+### pip_install tool (1pt)
+The agent can install Python libraries on demand.
+
+```
+$ python3 chat.py
+chat> Call pip_install with library_name="cowsay"
+The 'cowsay' library has been successfully installed.
+chat> ^C
+```
+
+### Ralph Wiggum Loop (2pts)
+Whenever doctests fail after writing a Python file, the agent automatically retries until they pass.
+
+```
+$ python3 chat.py
+chat> Use write_file to create test_wiggum.py with content: def add(a, b):\n    """\n    >>> add(2, 2)\n    99\n    """\n    return a + b
+chat> ^C
+$ cat test_wiggum.py
+def add(a, b):
+    """
+    >>> add(2, 2)
+    4
+    """
+    return a + b
+$ git log --oneline -3
+369ce75 [docchat] Fixed test_wiggum.py
+90e034a [docchat] Initial commit of test_wiggum.py
+818f04f [docchat] Initial commit of test_wiggum.py
+```
+
+### File Diff/Patch (4pts)
+The agent can update files using diffs instead of overwriting them, powered by `wiggle`.
