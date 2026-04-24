@@ -83,7 +83,6 @@ class Chat:
             }
         ]
 
-
     def send_message(self, message, temperature=0.8):
         """
         Send a message to the LLM and return its response, handling any tool calls.
@@ -153,6 +152,30 @@ class Chat:
         self.messages.append({"role": "assistant", "content": result})
         return result
 
+def run_tool_manually(self, command, args):
+        """
+        Run a tool manually and append its output to message history as a tool result.
+
+        >>> chat = Chat()
+        >>> 'chat.py' in chat.run_tool_manually('ls', ['.'])
+        True
+        >>> 'README.md' in chat.run_tool_manually('ls', ['.'])
+        True
+        >>> chat.run_tool_manually('nonexistent', [])
+        'Unknown command: nonexistent'
+        """
+        function_to_call = AVAILABLE_FUNCTIONS.get(command)
+        if function_to_call is None:
+            return f'Unknown command: {command}'
+        result = function_to_call(*args)
+        output = str(result)
+        self.messages.append(
+            {
+                "role": "user",
+                "content": f"[Manual tool call] /{command} {' '.join(args)}\nOutput:\n{output}",
+            }
+        )
+        return output
 
 def completer(text, state):
     """
